@@ -18,7 +18,7 @@ type version struct {
 	Version string `json:"version"`
 }
 
-type appInfo struct {
+type AppInfo struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Author      struct {
@@ -34,7 +34,7 @@ type sessionId struct {
 	URI       string `json:"uri"`
 }
 
-func GetSession(appInfo) (sessionId, error) {
+func GetSession(AppInfo) (sessionId, error) {
 	//url := "http://localhost:54235/razer/chromasdk"
 
 	response, err := http.Get(sdkUrl)
