@@ -1,1 +1,1 @@
-"# goRazerChromaSDK-" 
+"# goRazerChromaSDK" 
