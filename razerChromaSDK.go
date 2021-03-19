@@ -44,10 +44,5 @@ func getVersion() (version, error) {
 		return version{}, err
 	}
 	return curVersion, nil
-	// var verResp version
-	// json.Unmarshal(responseData, &verResp)
-	// fmt.Printf("%+v\n", verResp)
 
-	// return jsonData
-	//fmt.Println(string(responseData))
 }
