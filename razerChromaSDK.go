@@ -18,13 +18,15 @@ type version struct {
 	Version string `json:"version"`
 }
 
+type Author struct {
+	Name    string `json:"name"`
+	Contact string `json:"contact"`
+}
+
 type AppInfo struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Author      struct {
-		Name    string `json:"name"`
-		Contact string `json:"contact"`
-	} `json:"author"`
+	Title           string `json:"title"`
+	Description     string `json:"description"`
+	Author          `json:"author"`
 	DeviceSupported []string `json:"device_supported"`
 	Category        string   `json:"category"`
 }
