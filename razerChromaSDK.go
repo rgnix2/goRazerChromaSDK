@@ -22,7 +22,7 @@ type version struct {
 	Version string `json:"version"`
 }
 
-func getVersion() (version, error) {
+func GetVersion() (version, error) {
 
 	url := "http://localhost:54235/razer/chromasdk"
 
