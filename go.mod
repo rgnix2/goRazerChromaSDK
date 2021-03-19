@@ -1,3 +1,3 @@
-module github.com/rgnix2/goRazerCrhomaSDK
+module goRazerChromaSDK
 
 go 1.16

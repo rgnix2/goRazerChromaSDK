@@ -1,4 +1,4 @@
-package goRazerCrhomaSDK
+package goRazerChromaSDK
 
 import "fmt"
 
