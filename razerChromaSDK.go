@@ -6,15 +6,11 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 )
 
-// Hello returns a greeting for the named person.
-func Hello(name string) string {
-	// Return a greeting that embeds the name in a message.
-	message := fmt.Sprintf("Hi, %v. Welcome!", name)
-	return message
-}
+const (
+	sdkUrl string = "http://localhost:54235/razer/chromasdk"
+)
 
 type version struct {
 	Core    string `json:"core"`
@@ -22,15 +18,55 @@ type version struct {
 	Version string `json:"version"`
 }
 
+type appInfo struct {
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Author      struct {
+		Name    string `json:"name"`
+		Contact string `json:"contact"`
+	} `json:"author"`
+	DeviceSupported []string `json:"device_supported"`
+	Category        string   `json:"category"`
+}
+
+type sessionId struct {
+	Sessionid int    `json:"sessionid"`
+	URI       string `json:"uri"`
+}
+
+func GetSession(appInfo) (sessionId, error) {
+	//url := "http://localhost:54235/razer/chromasdk"
+
+	response, err := http.Get(sdkUrl)
+	if err != nil {
+		log.Fatal(err)
+
+	}
+	responseData, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer response.Body.Close()
+	curSession := sessionId{}
+	err = json.Unmarshal(responseData, &curSession)
+	if err != nil {
+		return sessionId{}, err
+	}
+	fmt.Println(string(responseData))
+	return curSession, nil
+
+}
+
 func GetVersion() (version, error) {
 
-	url := "http://localhost:54235/razer/chromasdk"
+	//url := "http://localhost:54235/razer/chromasdk"
 
-	response, err := http.Get(url)
+	response, err := http.Get(sdkUrl)
 
 	if err != nil {
-		fmt.Print(err.Error())
-		os.Exit(1)
+		log.Fatal(err)
+
 	}
 
 	responseData, err := ioutil.ReadAll(response.Body)
@@ -38,11 +74,13 @@ func GetVersion() (version, error) {
 		log.Fatal(err)
 	}
 
+	defer response.Body.Close()
 	curVersion := version{}
 	err = json.Unmarshal(responseData, &curVersion)
 	if err != nil {
 		return version{}, err
 	}
+	fmt.Println(string(responseData))
 	return curVersion, nil
 
 }
