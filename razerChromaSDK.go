@@ -1,5 +1,6 @@
 package goRazerChromaSDK
 
+// use convention commits and something to create change log using them.
 import (
 	"bytes"
 	"encoding/json"
@@ -9,7 +10,7 @@ import (
 )
 
 const (
-	SKD_Url string = "http://localhost:54235/razer/chromasdk"
+	api string = "http://localhost:54235/razer/chromasdk"
 )
 
 type version struct {
@@ -46,7 +47,7 @@ func GetSession(app AppInfo) (sessionId, error) {
 	if err != nil {
 		panic(err)
 	}
-	resp, err := http.Post(SKD_Url, "application/json", bytes.NewBuffer(reqBody))
+	resp, err := http.Post(api, "application/json", bytes.NewBuffer(reqBody))
 	//fmt.Println("postBody:", resp.Body)
 	if err != nil {
 		panic(err)
@@ -71,7 +72,7 @@ func GetSession(app AppInfo) (sessionId, error) {
 
 func GetVersion() (version, error) {
 
-	response, err := http.Get(SKD_Url)
+	response, err := http.Get(api)
 
 	if err != nil {
 		log.Fatal(err)
