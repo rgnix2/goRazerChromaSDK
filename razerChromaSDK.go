@@ -1,15 +1,15 @@
 package goRazerChromaSDK
 
 import (
+	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 )
 
 const (
-	sdkUrl string = "http://localhost:54235/razer/chromasdk"
+	SKD_Url string = "http://localhost:54235/razer/chromasdk"
 )
 
 type version struct {
@@ -36,39 +36,45 @@ type sessionId struct {
 	URI       string `json:"uri"`
 }
 
-func GetSession(AppInfo) (sessionId, error) {
-	//url := "http://localhost:54235/razer/chromasdk"
+func GetSession(app AppInfo) (sessionId, error) {
 
-	response, err := http.Get(sdkUrl)
+	//app := AppInfo{}
+	//log.Println("appAuthorName: ", app.Author.Name)
+
+	reqBody, err := json.Marshal(app)
+	//println("reqbody:", string(reqBody), err)
 	if err != nil {
-		log.Fatal(err)
-
+		panic(err)
 	}
-	responseData, err := ioutil.ReadAll(response.Body)
+	resp, err := http.Post(SKD_Url, "application/json", bytes.NewBuffer(reqBody))
+	//fmt.Println("postBody:", resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
-	defer response.Body.Close()
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		print(err)
+	}
+
+	//fmt.Println("stringBody ", string(body))
 	curSession := sessionId{}
-	err = json.Unmarshal(responseData, &curSession)
+	err = json.Unmarshal(body, &curSession)
 	if err != nil {
 		return sessionId{}, err
 	}
-	fmt.Println(string(responseData))
+	//fmt.Println("stringBody2 ", string(body))
 	return curSession, nil
 
 }
 
 func GetVersion() (version, error) {
 
-	//url := "http://localhost:54235/razer/chromasdk"
-
-	response, err := http.Get(sdkUrl)
+	response, err := http.Get(SKD_Url)
 
 	if err != nil {
 		log.Fatal(err)
-
 	}
 
 	responseData, err := ioutil.ReadAll(response.Body)
@@ -82,7 +88,7 @@ func GetVersion() (version, error) {
 	if err != nil {
 		return version{}, err
 	}
-	fmt.Println(string(responseData))
+	//fmt.Println(string(responseData))
 	return curVersion, nil
 
 }
